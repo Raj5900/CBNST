@@ -7,15 +7,8 @@ int fact(int n) {
     return factorial;
 }
 
-int main() {
-    printf("RAJ VIKRAM SINGH \n SECTION - C \n");
-
-    // Sample data
-    float x[] = {1891, 1901, 1911, 1921, 1931}; 
-    float y[] = {46, 66, 81, 93, 101}; 
-    int n = sizeof(x) / sizeof(x[0]);  // Number of data points
-
-    float backward_diff[20][20], value, u, h, result;
+void displayBackwardDiffTable(float x[], float y[], int n) {
+    float backward_diff[20][20];
 
     // Initialize backward difference table
     for (int i = 0; i < n; i++) {
@@ -38,23 +31,73 @@ int main() {
         }
         printf("\n");
     }
+}
 
-    // Value to interpolate
-    value = 1920;  // Change this to the year you want to interpolate
+int main() {
+    // Student Information
+    printf("RAJ VIKRAM SINGH \nSECTION - C \nRoll No: 49\n");
 
-    h = x[1] - x[0]; 
-    u = (value - x[n-1]) / h;  // Note the change for backward interpolation
+    // Data points
+    int n;
+    printf("Enter the number of data points: ");
+    scanf("%d", &n);
 
-    result = backward_diff[n-1][0];  // Start with the last y value
+    if (n < 2) {
+        printf("At least two data points are required.\n");
+        return 0;
+    }
+
+    float x[n], y[n], value;
+
+    // Input for x and y arrays
+    printf("Enter the years (x values):\n");
+    for (int i = 0; i < n; i++) {
+        printf("x[%d]: ", i);
+        scanf("%f", &x[i]);
+    }
+
+    printf("Enter the corresponding population (y values):\n");
+    for (int i = 0; i < n; i++) {
+        printf("y[%d]: ", i);
+        scanf("%f", &y[i]);
+    }
+
+    // Check for uniform spacing
+    float h = x[1] - x[0];
+    int isUniform = 1;  // Flag for uniformity
+
+    for (int i = 1; i < n - 1; i++) {
+        if (x[i + 1] - x[i] != h) {
+            isUniform = 0;
+            break;
+        }
+    }
+
+    if (!isUniform) {
+        printf("NO UNIFORM POINTS \n");
+        return 0;
+    }
+
+    // Input for the interpolation value
+    printf("Enter the year for interpolation: ");
+    scanf("%f", &value);
+
+    // Backward Interpolation
+    float u = (value - x[n - 1]) / h;  // Normalize u based on last x value
+    float result_backward = y[n - 1];
+    
     for (int i = 1; i < n; i++) {
         float u_term = u;
         for (int j = 1; j < i; j++) {
-            u_term *= (u + j);  // Adjusting for backward interpolation
+            u_term *= (u + j);
         }
-        result += (u_term * backward_diff[n-1][i]) / fact(i);
+        result_backward += (u_term * (y[n - i] - y[n - i - 1])) / fact(i);
     }
 
-    printf("\nThe interpolated population in the year %0.2f is %0.2f\n", value, result);
+    // Display Backward Difference Table
+    displayBackwardDiffTable(x, y, n);
 
+    printf("\nThe interpolated population in the year %0.2f (Backward) is %0.2f\n", value, result_backward);
+    
     return 0;
 }
