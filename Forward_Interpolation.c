@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+
 int fact(int n) {
     int factorial = 1;
     for (int i = 2; i <= n; i++)
@@ -12,11 +13,51 @@ int main() {
     printf("RAJ VIKRAM SINGH \nSECTION - C \nRoll No: 49\n");
 
     // Data points
-    float x[] = {1891, 1901, 1911, 1921, 1931}; 
-    float y[] = {46, 66, 81, 93, 101}; 
-    int n = sizeof(x) / sizeof(x[0]);  // Number of data points
+    int n;
+    printf("Enter the number of data points: ");
+    scanf("%d", &n);
 
-    float forward_diff[20][20], value, u, h, result;
+    if (n < 2) {
+        printf("At least two data points are required.\n");
+        return 0;
+    }
+
+    float x[n], y[n], value;
+
+    // Input for x and y arrays
+    printf("Enter the years (x values):\n");
+    for (int i = 0; i < n; i++) {
+        printf("x[%d]: ", i);
+        scanf("%f", &x[i]);
+    }
+
+    printf("Enter the corresponding population (y values):\n");
+    for (int i = 0; i < n; i++) {
+        printf("y[%d]: ", i);
+        scanf("%f", &y[i]);
+    }
+
+    // Check for uniform spacing
+    float h = x[1] - x[0];
+    int isUniform = 1;  // Flag for uniformity
+
+    for (int i = 1; i < n - 1; i++) {
+        if (x[i + 1] - x[i] != h) {
+            isUniform = 0;
+            break;
+        }
+    }
+
+    if (!isUniform) {
+        printf("NO UNIFORM POINTS \n");
+        return 0;
+    }
+
+    // Input for the interpolation value
+    printf("Enter the year for interpolation: ");
+    scanf("%f", &value);
+
+    float forward_diff[20][20];
 
     // Initialize forward difference table
     for (int i = 0; i < n; i++) {
@@ -40,15 +81,11 @@ int main() {
         printf("\n");
     }
 
-    // Interpolation value
-    value = 1895;
-
-    // Calculate h and u
-    h = x[1] - x[0]; 
-    u = (value - x[0]) / h;
+    // Calculate u
+    float u = (value - x[0]) / h;
 
     // Calculate interpolated result
-    result = y[0];
+    float result = y[0];
     for (int i = 1; i < n; i++) {
         float u_term = u;
         for (int j = 1; j < i; j++) {
