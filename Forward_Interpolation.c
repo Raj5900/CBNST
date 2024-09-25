@@ -25,13 +25,13 @@ int main() {
     float x[n], y[n], value;
 
     // Input for x and y arrays
-    printf("Enter the years (x values):\n");
+    printf("Enter the (x values):\n");
     for (int i = 0; i < n; i++) {
         printf("x[%d]: ", i);
         scanf("%f", &x[i]);
     }
 
-    printf("Enter the corresponding population (y values):\n");
+    printf("Enter the corresponding values (y values):\n");
     for (int i = 0; i < n; i++) {
         printf("y[%d]: ", i);
         scanf("%f", &y[i]);
@@ -54,7 +54,7 @@ int main() {
     }
 
     // Input for the interpolation value
-    printf("Enter the year for interpolation: ");
+    printf("Enter the value  for interpolation: ");
     scanf("%f", &value);
 
     float forward_diff[20][20];
@@ -94,7 +94,7 @@ int main() {
         result += (u_term * forward_diff[0][i]) / fact(i);
     }
 
-    printf("\nThe interpolated population in the year %0.2f is %0.2f\n", value, result);
+    printf("\nThe interpolated value  %0.2f is %0.2f\n", value, result);
     
     return 0;
 }
