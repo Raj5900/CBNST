@@ -50,7 +50,7 @@ int main() {
     float x[n], y[n], value;
 
     // Input for x and y arrays
-    printf("Enter the years (x values):\n");
+    printf("Enter the (x values):\n");
     for (int i = 0; i < n; i++) {
         printf("x[%d]: ", i);
         scanf("%f", &x[i]);
@@ -79,7 +79,7 @@ int main() {
     }
 
     // Input for the interpolation value
-    printf("Enter the year for interpolation: ");
+    printf("Enter the x for interpolation: ");
     scanf("%f", &value);
 
     // Backward Interpolation
@@ -97,7 +97,7 @@ int main() {
     // Display Backward Difference Table
     displayBackwardDiffTable(x, y, n);
 
-    printf("\nThe interpolated population in the year %0.2f (Backward) is %0.2f\n", value, result_backward);
+    printf("\nThe interpolated value %0.2f (Backward) is %0.2f\n", value, result_backward);
     
     return 0;
 }
