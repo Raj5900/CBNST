@@ -67,7 +67,7 @@ void printSolution(float a[MAX][MAX], int n) {
 }
 
 int main() {
-    printf("  Prakhar Tyagi \n SECTION - C \n ROLL NO - 42\n\n");
+    printf("  Raj Vikram Singh \n SECTION - C \n ROLL NO - 49\n\n");
     int n = 3;  // Number of equations
     float a[MAX][MAX];
 
