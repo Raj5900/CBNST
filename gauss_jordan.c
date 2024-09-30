@@ -1,72 +1,87 @@
 #include <stdio.h>
+#include<math.h>
+#define MAX 10
 
-#define MAX 20
-
-// Function to print the current state of the matrix
-void printMatrix(float A[MAX][MAX], int n) {
-    printf("\nCurrent matrix:\n");
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n + 1; j++) {
-            printf("%8.2f ", A[i][j]);
+void printMatrix(float a[MAX][MAX], int n) {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j <= n; j++) {
+            printf("%0.2f\t", a[i][j]);
         }
         printf("\n");
     }
     printf("\n");
 }
 
-int main() {
-    int i, j, k, n;
-    float A[MAX][MAX], c, x[MAX];
-    
-    // Input matrix size
-    printf("\nEnter the size of the matrix (number of variables): ");
-    if (scanf("%d", &n) != 1 || n <= 0 || n > MAX) {
-        printf("Invalid matrix size. Please enter a positive integer <= %d.\n", MAX);
-        return 1;
-    }
-
-    // Input the augmented matrix row-wise
-    printf("\nEnter the elements of the augmented matrix row-wise:\n");
-    for (i = 1; i <= n; i++) {
-        for (j = 1; j <= n + 1; j++) {
-            printf(" A[%d][%d]: ", i, j);
-            if (scanf("%f", &A[i][j]) != 1) {
-                printf("Invalid input. Please enter numeric values.\n");
-                return 1;
+void gaussJordan(float a[MAX][MAX], int n) {
+    for (int i = 0; i < n; i++) {
+        // Find the maximum element in the current column
+        float maxEl = fabs(a[i][i]);
+        int maxRow = i;
+        for (int k = i + 1; k < n; k++) {
+            if (fabs(a[k][i]) > maxEl) {
+                maxEl = fabs(a[k][i]);
+                maxRow = k;
             }
         }
-    }
 
-    // Gauss-Jordan Elimination process
-    for (j = 1; j <= n; j++) {
-        if (A[j][j] == 0) {
-            printf("Mathematical error! Division by zero detected.\n");
-            return 1;
+        // Swap maximum row with current row (if needed)
+        if (maxRow != i) {
+            for (int k = i; k <= n; k++) {
+                float temp = a[maxRow][k];
+                a[maxRow][k] = a[i][k];
+                a[i][k] = temp;
+            }
         }
-        for (i = 1; i <= n; i++) {
-            if (i != j) {
-                c = A[i][j] / A[j][j];
-                for (k = 1; k <= n + 1; k++) {
-                    A[i][k] -= c * A[j][k];
+
+        // Normalize the pivot row
+        float diag = a[i][i];
+        for (int j = 0; j <= n; j++) {
+            a[i][j] /= diag;  // Make the pivot 1
+        }
+
+        // Print matrix after making the pivot 1
+        printf("Matrix after making a[%d][%d] = 1:\n", i, i);
+        printMatrix(a, n);
+
+        // Make the other rows contain 0s in the current column
+        for (int j = 0; j < n; j++) {
+            if (j != i) {
+                float factor = a[j][i];
+                for (int k = 0; k <= n; k++) {
+                    a[j][k] -= factor * a[i][k];  // Eliminate
                 }
             }
         }
-        // Normalize the pivot row
-        for (k = 1; k <= n + 1; k++) {
-            A[j][k] /= A[j][j];
+
+        // Print matrix after eliminating column
+        printf("Matrix after eliminating column %d:\n", i);
+        printMatrix(a, n);
+    }
+}
+
+void printSolution(float a[MAX][MAX], int n) {
+    printf("Solution:\n");
+    for (int i = 0; i < n; i++) {
+        printf("x%d = %0.2f\n", i + 1, a[i][n]);
+    }
+}
+
+int main() {
+    printf("  Raj Vikram Singh \n SECTION - C \n ROLL NO - 49\n\n");
+    int n = 3;  // Number of equations
+    float a[MAX][MAX];
+
+    // Enter the augmented matrix (coefficients and constants)
+    printf("Enter the augmented matrix (coefficients and constants):\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j <= n; j++) {
+            printf("Enter a[%d][%d]: ", i, j);
+            scanf("%f", &a[i][j]);
         }
-        
-        // Print the matrix after each elimination step
-        printf("\nMatrix after making column %d a unit column:\n", j);
-        printMatrix(A, n);
     }
 
-    // The solutions are now in the last column of the matrix
-    printf("\nThe solution is:\n");
-    for (i = 1; i <= n; i++) {
-        x[i] = A[i][n + 1];
-        printf("\n x%d = %f", i, x[i]);
-    }
+    gaussJordan(a, n);
+    printSolution(a, n);
 
     return 0;
 }
